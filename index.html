@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>检察机关地表水水质审核系统 - GB 3838-2002</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%233b82f6'/%3E%3Cstop offset='1' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M32 6 C32 6 12 30 12 42 C12 53 21 60 32 60 C43 60 52 53 52 42 C52 30 32 6 32 6 Z' fill='url(%23g)'/%3E%3C/svg%3E">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #dbeafe;
+    --success: #16a34a;
+    --success-bg: #dcfce7;
+    --success-text: #166534;
+    --danger: #dc2626;
+    --danger-bg: #fee2e2;
+    --danger-text: #991b1b;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.12);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei",
+                 "PingFang SC", "Hiragino Sans GB", sans-serif;
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #dbeafe 0%, transparent 55%),
+      radial-gradient(1000px 500px at 100% 0%, #d1fae5 0%, transparent 50%),
+      #f8fafc;
+    min-height: 100vh;
+    color: var(--gray-900);
+    line-height: 1.6;
+    padding: 32px 16px 64px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  /* ============ 顶部标题 ============ */
+  .hero {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .hero-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
+    margin-bottom: 14px;
+  }
+  .hero-icon svg { width: 30px; height: 30px; fill: #fff; }
+  .hero h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--gray-900);
+    margin-bottom: 6px;
+  }
+  .hero p {
+    font-size: 13px;
+    color: var(--gray-500);
+  }
+
+  /* ============ 步骤条 ============ */
+  .steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    padding: 0 8px;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    transition: all 0.25s;
+    font-size: 13px;
+    color: var(--gray-500);
+    font-weight: 500;
+  }
+  .step .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--gray-200);
+    color: var(--gray-600);
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .step.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+  .step.active .num { background: rgba(255,255,255,0.25); color: #fff; }
+  .step.done {
+    background: var(--success-bg);
+    border-color: #86efac;
+    color: var(--success-text);
+  }
+  .step.done .num { background: var(--success); color: #fff; }
+  .step .line {
+    display: none;
+  }
+  .step-arrow {
+    color: var(--gray-300);
+    font-size: 14px;
+    user-select: none;
+  }
+
+  /* ============ 卡片 ============ */
+  .card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(226, 232, 240, 0.7);
+  }
+  .card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gray-800);
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--gray-100);
+  }
+  .card-title::before {
+    content: "";
+    display: inline-block;
+    width: 4px; height: 18px;
+    background: linear-gradient(180deg, #3b82f6, #06b6d4);
+    border-radius: 2px;
+  }
+
+  /* ============ 表单 ============ */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 24px;
+  }
+  .form-grid.single {
+    grid-template-columns: 1fr;
+  }
+  .form-item { display: flex; flex-direction: column; gap: 6px; }
+  .form-item label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-700);
+  }
+  .form-item label .req {
+    color: var(--danger);
+    margin-left: 2px;
+  }
+  .form-item .hint {
+    font-size: 11px;
+    color: var(--gray-400);
+    font-weight: 400;
+  }
+  input[type="text"],
+  input[type="number"],
+  select {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    background: var(--gray-50);
+    color: var(--gray-900);
+    outline: none;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  input:hover, select:hover { border-color: var(--gray-300); }
+  input:focus, select:focus {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+  input::placeholder { color: var(--gray-400); }
+  select { cursor: pointer; }
+
+  /* ============ 按钮 ============ */
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    gap: 12px;
+  }
+  .actions.right { justify-content: flex-end; }
+  .actions.center { justify-content: center; }
+  .actions .spacer { flex: 1; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+  }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    background: #fff;
+    color: var(--gray-700);
+    border: 1.5px solid var(--gray-300);
+  }
+  .btn-secondary:hover {
+    background: var(--gray-50);
+    border-color: var(--gray-400);
+  }
+
+  .btn-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+  .btn-success:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+  }
+
+  .btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+  /* ============ 页面切换 ============ */
+  .page { display: none; animation: fadeIn 0.35s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============ 报告 ============ */
+  .report-header {
+    text-align: center;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--gray-100);
+  }
+  .report-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gray-900);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .report-header .sub {
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+
+  .info-panel {
+    background: linear-gradient(135deg, #eff6ff, #f0fdfa);
+    border: 1px solid #dbeafe;
+    border-radius: var(--radius-sm);
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 24px;
+  }
+  .info-panel .row {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    align-items: baseline;
+  }
+  .info-panel .row .k {
+    color: var(--gray-500);
+    font-weight: 500;
+    flex-shrink: 0;
+    min-width: 68px;
+  }
+  .info-panel .row .v {
+    color: var(--gray-900);
+    font-weight: 600;
+  }
+
+  .data-table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-200);
+    margin-bottom: 24px;
+  }
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  table.data-table thead th {
+    background: linear-gradient(180deg, #f1f5f9, #e2e8f0);
+    color: var(--gray-700);
+    font-weight: 700;
+    text-align: center;
+    padding: 12px 10px;
+    border-bottom: 2px solid var(--gray-300);
+    white-space: nowrap;
+  }
+  table.data-table tbody td {
+    padding: 11px 10px;
+    text-align: center;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-800);
+  }
+  table.data-table tbody tr:last-child td { border-bottom: none; }
+  table.data-table tbody tr:hover { background: var(--gray-50); }
+
+  td.cell-pass {
+    background: var(--success-bg) !important;
+    color: var(--success-text) !important;
+    font-weight: 600;
+  }
+  td.cell-fail {
+    background: var(--danger-bg) !important;
+    color: var(--danger-text) !important;
+    font-weight: 600;
+  }
+  td.cell-none {
+    color: var(--gray-400);
+  }
+
+  .verdict {
+    border-radius: var(--radius-sm);
+    padding: 18px 22px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .verdict.pass {
+    background: linear-gradient(135deg, #dcfce7, #d1fae5);
+    border-left: 4px solid var(--success);
+  }
+  .verdict.fail {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    border-left: 4px solid var(--danger);
+  }
+  .verdict .icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .verdict.pass .icon { background: var(--success); }
+  .verdict.fail .icon { background: var(--danger); }
+  .verdict .text h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .verdict.pass .text h3 { color: var(--success-text); }
+  .verdict.fail .text h3 { color: var(--danger-text); }
+  .verdict .text p {
+    font-size: 12px;
+    color: var(--gray-600);
+    line-height: 1.6;
+  }
+
+  /* ============ 底部提示 ============ */
+  .footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--gray-400);
+    margin-top: 24px;
+    padding: 0 16px;
+  }
+
+  /* ============ 响应式 ============ */
+  @media (max-width: 680px) {
+    body { padding: 18px 10px 40px; }
+    .card { padding: 20px 18px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .info-panel { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 20px; }
+    .steps { flex-wrap: wrap; }
+    .step span.label { display: none; }
+    .actions { flex-direction: column-reverse; }
+    .actions .btn { width: 100%; }
+  }
+
+  /* 打印样式 */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .hero, .steps, .actions, .footer-note, .no-print { display: none !important; }
+    .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- 顶部 -->
+  <div class="hero">
+    <div class="hero-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C12 2 5 10.5 5 15.5C5 19.09 8.13 22 12 22C15.87 22 19 19.09 19 15.5C19 10.5 12 2 12 2Z"/>
+      </svg>
+    </div>
+    <h1>检察机关地表水水质审核系统</h1>
+    <p>依据国标 GB 3838-2002《地表水环境质量标准》自动判定水质类别</p>
+  </div>
+
+  <!-- 步骤条 -->
+  <div class="steps no-print">
+    <div class="step active" id="step1"><span class="num">1</span><span class="label">基本信息</span></div>
+    <span class="step-arrow">→</span>
+    <div class="step" id="step2"><span class="num">2</span><span class="label">检测数据</span></div>
+    <span class="step-arrow">→</span>
+    <div class="step" id="step3"><span class="num">3</span><span class="label">检测报告</span></div>
+  </div>
+
+  <!-- ============ 页面 1：基本信息 ============ -->
+  <section class="page active" id="page1">
+    <div class="card">
+      <div class="card-title">检测基本信息</div>
+      <div class="form-grid">
+        <div class="form-item">
+          <label>检测机构 <span class="req">*</span></label>
+          <input type="text" id="info-org" placeholder="例如：XX市环境监测中心">
+        </div>
+        <div class="form-item">
+          <label>检测时间 <span class="req">*</span></label>
+          <input type="text" id="info-time" placeholder="例如：2026-09-22 14:30">
+        </div>
+        <div class="form-item">
+          <label>检测地点 <span class="req">*</span></label>
+          <input type="text" id="info-site" placeholder="例如：XX河XX断面">
+        </div>
+        <div class="form-item">
+          <label>委托部门 <span class="req">*</span></label>
+          <input type="text" id="info-dept" placeholder="例如：市生态环境局">
+        </div>
+        <div class="form-item">
+          <label>委托时间 <span class="req">*</span></label>
+          <input type="text" id="info-commission-time" placeholder="例如：2026-09-15">
+        </div>
+        <div class="form-item">
+          <label>检测员 <span class="req">*</span></label>
+          <input type="text" id="info-inspector" placeholder="检测员姓名">
+        </div>
+      </div>
+      <div class="actions right">
+        <button class="btn btn-primary" onclick="goToStep2()">
+          下一步
+          <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+        </button>
+      </div>
+    </div>
+    <p class="footer-note">带 <span style="color:#dc2626">*</span> 为必填项</p>
+  </section>
+
+  <!-- ============ 页面 2：检测数据 ============ -->
+  <section class="page" id="page2">
+    <div class="card">
+      <div class="card-title">水样信息</div>
+      <div class="form-grid">
+        <div class="form-item">
+          <label>水样编号 <span class="req">*</span></label>
+          <input type="text" id="sample-id" placeholder="例如：S20260922-001">
+        </div>
+        <div class="form-item">
+          <label>水样类别（判定目标） <span class="req">*</span></label>
+          <select id="sample-category">
+            <option value="Ⅰ类">Ⅰ类</option>
+            <option value="Ⅱ类">Ⅱ类</option>
+            <option value="Ⅲ类" selected>Ⅲ类</option>
+            <option value="Ⅳ类">Ⅳ类</option>
+            <option value="Ⅴ类">Ⅴ类</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">检测数据录入</div>
+      <div class="form-grid">
+        <div class="form-item">
+          <label>pH <span class="hint">（无量纲，0～14）</span></label>
+          <input type="number" id="val-pH" step="0.01" placeholder="例如：7.2">
+        </div>
+        <div class="form-item">
+          <label>COD 化学需氧量 <span class="hint">（mg/L）</span></label>
+          <input type="number" id="val-COD" step="0.01" placeholder="例如：15.5">
+        </div>
+        <div class="form-item">
+          <label>电导率 <span class="hint">（μS/cm，仅记录，不参与判定）</span></label>
+          <input type="number" id="val-电导率" step="0.01" placeholder="例如：480">
+        </div>
+        <div class="form-item">
+          <label>氨氮 <span class="hint">（mg/L）</span></label>
+          <input type="number" id="val-氨氮" step="0.001" placeholder="例如：0.85">
+        </div>
+        <div class="form-item">
+          <label>总磷 <span class="hint">（mg/L）</span></label>
+          <input type="number" id="val-总磷" step="0.001" placeholder="例如：0.18">
+        </div>
+        <div class="form-item">
+          <label>重金属铅 Pb <span class="hint">（mg/L）</span></label>
+          <input type="number" id="val-铅" step="0.0001" placeholder="例如：0.008">
+        </div>
+        <div class="form-item">
+          <label>重金属镉 Cd <span class="hint">（mg/L）</span></label>
+          <input type="number" id="val-镉" step="0.0001" placeholder="例如：0.002">
+        </div>
+        <div class="form-item">
+          <label>重金属汞 Hg <span class="hint">（mg/L）</span></label>
+          <input type="number" id="val-汞" step="0.00001" placeholder="例如：0.00003">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-secondary" onclick="goToStep1()">
+          <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+          上一步
+        </button>
+        <button class="btn btn-primary" onclick="goToStep3()">
+          确认审核
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        </button>
+      </div>
+    </div>
+    <p class="footer-note">未填写的检测项将跳过判定；电导率不属于 GB 3838-2002 基本项目，仅作记录</p>
+  </section>
+
+  <!-- ============ 页面 3：检测报告 ============ -->
+  <section class="page" id="page3">
+    <div class="card">
+      <div class="report-header">
+        <h2>地表水水质检测报告单</h2>
+        <div class="sub">依据标准：GB 3838-2002《地表水环境质量标准》</div>
+      </div>
+
+      <div class="info-panel" id="report-info"></div>
+      <div class="data-table-wrap" id="report-table-wrap"></div>
+      <div id="report-verdict"></div>
+    </div>
+
+    <div class="actions center no-print" style="flex-wrap: wrap;">
+      <button class="btn btn-success" onclick="exportExcel()">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        导出为表格 (Excel)
+      </button>
+      <button class="btn btn-success" onclick="exportWord()">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        导出为文档 (Word)
+      </button>
+      <button class="btn btn-secondary" onclick="resetAll()">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4a8 8 0 1 0 7.73 10h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        重新开始
+      </button>
+    </div>
+    <p class="footer-note">导出后将保存在浏览器默认下载位置，或在设置中开启"每次询问保存位置"以便自选路径</p>
+  </section>
+
+</div>
+
+<script>
+// ==================== 标准限值（GB 3838-2002 表1）====================
+const LIMITS = {
+  pH:     {"Ⅰ类": [6.0, 9.0], "Ⅱ类": [6.0, 9.0], "Ⅲ类": [6.0, 9.0],
+           "Ⅳ类": [6.0, 9.0], "Ⅴ类": [6.0, 9.0]},
+  COD:    {"Ⅰ类": 15,    "Ⅱ类": 15,   "Ⅲ类": 20,   "Ⅳ类": 30,   "Ⅴ类": 40},
+  "氨氮": {"Ⅰ类": 0.15,  "Ⅱ类": 0.5,  "Ⅲ类": 1.0,  "Ⅳ类": 1.5,  "Ⅴ类": 2.0},
+  "总磷": {"Ⅰ类": 0.02,  "Ⅱ类": 0.1,  "Ⅲ类": 0.2,  "Ⅳ类": 0.3,  "Ⅴ类": 0.4},
+  "铅":   {"Ⅰ类": 0.01,  "Ⅱ类": 0.01, "Ⅲ类": 0.05, "Ⅳ类": 0.05, "Ⅴ类": 0.1},
+  "镉":   {"Ⅰ类": 0.001, "Ⅱ类": 0.005,"Ⅲ类": 0.005,"Ⅳ类": 0.005,"Ⅴ类": 0.01},
+  "汞":   {"Ⅰ类": 5e-5,  "Ⅱ类": 5e-5, "Ⅲ类": 1e-4, "Ⅳ类": 1e-3, "Ⅴ类": 1e-3},
+};
+
+const UNITS = {
+  pH: "无量纲", COD: "mg/L", "电导率": "μS/cm",
+  "氨氮": "mg/L", "总磷": "mg/L",
+  "铅": "mg/L", "镉": "mg/L", "汞": "mg/L"
+};
+
+const PARAM_ORDER = ["pH", "COD", "电导率", "氨氮", "总磷", "铅", "镉", "汞"];
+
+const DISCLAIMER = "注：本报告单仅对此样本负责，结果数值参照国标《GB 3838-2002 地表水环境质量标准》。";
+
+// ==================== 全局状态 ====================
+let infoData = {};
+let reportData = null;
+
+// ==================== 页面切换 ====================
+function showPage(n) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById("page" + n).classList.add("active");
+
+  for (let i = 1; i <= 3; i++) {
+    const s = document.getElementById("step" + i);
+    s.classList.remove("active", "done");
+    if (i < n) s.classList.add("done");
+    else if (i === n) s.classList.add("active");
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// ==================== 页面 1 → 2 ====================
+function goToStep2() {
+  const fields = {
+    "检测机构": document.getElementById("info-org").value.trim(),
+    "检测时间": document.getElementById("info-time").value.trim(),
+    "检测地点": document.getElementById("info-site").value.trim(),
+    "委托部门": document.getElementById("info-dept").value.trim(),
+    "委托时间": document.getElementById("info-commission-time").value.trim(),
+    "检测员":   document.getElementById("info-inspector").value.trim(),
+  };
+  for (const k in fields) {
+    if (!fields[k]) {
+      alert("请填写「" + k + "」");
+      return;
+    }
+  }
+  infoData = fields;
+  showPage(2);
+}
+
+// ==================== 页面 2 → 1 ====================
+function goToStep1() {
+  showPage(1);
+}
+
+// ==================== 审核逻辑 ====================
+function auditSample(category, values) {
+  const results = {};
+  for (const param of PARAM_ORDER) {
+    if (param === "电导率") {
+      results[param] = {
+        ok: null,
+        desc: "不参与判定",
+        note: "电导率非 GB 3838-2002 基本项目"
+      };
+      continue;
+    }
+    const val = values[param];
+    if (val === null || val === undefined || isNaN(val)) {
+      results[param] = { ok: null, desc: "—", note: "未填写" };
+      continue;
+    }
+    if (param === "pH") {
+      const [low, high] = LIMITS.pH[category];
+      const ok = val >= low && val <= high;
+      results[param] = {
+        ok,
+        desc: low + " ～ " + high,
+        note: ok ? "合格" : "超出范围 " + low + "～" + high
+      };
+    } else {
+      const limit = LIMITS[param][category];
+      const ok = val <= limit;
+      results[param] = {
+        ok,
+        desc: "≤ " + limit + " " + UNITS[param],
+        note: ok ? "合格" : "超过限值 " + limit + " " + UNITS[param]
+      };
+    }
+  }
+  const allOk = Object.values(results).every(r => r.ok !== false);
+  return { results, allOk };
+}
+
+// ==================== 页面 2 → 3（审核并生成报告）====================
+function goToStep3() {
+  const sampleId = document.getElementById("sample-id").value.trim();
+  if (!sampleId) {
+    alert("请填写水样编号");
+    return;
+  }
+  const category = document.getElementById("sample-category").value;
+
+  const values = {};
+  for (const param of PARAM_ORDER) {
+    const el = document.getElementById("val-" + param);
+    const text = el.value.trim();
+    values[param] = text === "" ? null : parseFloat(text);
+    if (text !== "" && isNaN(values[param])) {
+      alert("「" + param + "」请输入有效数字");
+      el.focus();
+      return;
+    }
+  }
+
+  const { results, allOk } = auditSample(category, values);
+
+  reportData = {
+    info: infoData,
+    sampleId,
+    category,
+    values,
+    results,
+    allOk,
+    conclusion: allOk
+      ? "经检测，样本编号为" + sampleId + "的水样符合" + category + "水标准。"
+      : "经检测，样本编号为" + sampleId + "的水样不符合" + category + "水标准。"
+  };
+
+  renderReport(reportData);
+  showPage(3);
+}
+
+// ==================== 渲染报告 ====================
+function renderReport(data) {
+  // 一、基本信息
+  const infoEl = document.getElementById("report-info");
+  infoEl.innerHTML = Object.entries(data.info).map(([k, v]) =>
+    '<div class="row"><span class="k">' + k + '：</span><span class="v">' +
+    escapeHtml(v) + '</span></div>'
+  ).join("") +
+  '<div class="row"><span class="k">水样编号：</span><span class="v">' +
+    escapeHtml(data.sampleId) + '</span></div>' +
+  '<div class="row"><span class="k">水样类别：</span><span class="v">' +
+    escapeHtml(data.category) + '</span></div>';
+
+  // 二、数据表
+  let tableHtml = '<table class="data-table"><thead><tr>' +
+    '<th>检测项目</th><th>单位</th><th>标准限值</th><th>检测数值</th><th>判定</th>' +
+    '</tr></thead><tbody>';
+  for (const param of PARAM_ORDER) {
+    const r = data.results[param];
+    const val = data.values[param];
+    const valText = (val === null || val === undefined) ? "—" : val;
+    let cls = "cell-none";
+    if (r.ok === true) cls = "cell-pass";
+    else if (r.ok === false) cls = "cell-fail";
+    tableHtml += '<tr>' +
+      '<td>' + param + '</td>' +
+      '<td>' + UNITS[param] + '</td>' +
+      '<td>' + r.desc + '</td>' +
+      '<td class="' + cls + '">' + valText + '</td>' +
+      '<td class="' + cls + '">' + r.note + '</td>' +
+      '</tr>';
+  }
+  tableHtml += '</tbody></table>';
+  document.getElementById("report-table-wrap").innerHTML = tableHtml;
+
+  // 三、检测意见
+  const pass = data.allOk;
+  document.getElementById("report-verdict").innerHTML =
+    '<div class="verdict ' + (pass ? "pass" : "fail") + '">' +
+      '<div class="icon">' + (pass ? "✓" : "✕") + '</div>' +
+      '<div class="text">' +
+        '<h3>' + escapeHtml(data.conclusion) + '</h3>' +
+        '<p>' + DISCLAIMER + '</p>' +
+      '</div>' +
+    '</div>';
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
+// ==================== 下载工具 ====================
+function downloadBlob(content, filename, mime) {
+  const full = "\ufeff" + content;
+  const href = "data:" + mime + ";charset=utf-8," + encodeURIComponent(full);
+  const a = document.createElement("a");
+  a.href = href;
+  a.download = filename;
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function () {
+    if (a.parentNode) a.parentNode.removeChild(a);
+  }, 20000);
+}
+
+// ==================== 导出 Excel ====================
+function exportExcel() {
+  if (!reportData) return;
+  const d = reportData;
+  const info = d.info;
+
+  let rows = "";
+  // 基本信息行（每行两个字段）
+  const infoEntries = Object.entries(info).concat([
+    ["水样编号", d.sampleId],
+    ["水样类别", d.category]
+  ]);
+  for (let i = 0; i < infoEntries.length; i += 2) {
+    rows += '<tr>';
+    const a = infoEntries[i];
+    const b = infoEntries[i + 1];
+    rows += '<td style="font-weight:bold;background:#f1f5f9;">' + a[0] + '</td>' +
+            '<td>' + escapeHtml(a[1]) + '</td>';
+    if (b) {
+      rows += '<td style="font-weight:bold;background:#f1f5f9;">' + b[0] + '</td>' +
+              '<td>' + escapeHtml(b[1]) + '</td>';
+    } else {
+      rows += '<td></td><td></td>';
+    }
+    rows += '</tr>';
+  }
+
+  // 数据表头
+  rows += '<tr>' +
+    '<th style="background:#d9e1f2;font-weight:bold;">检测项目</th>' +
+    '<th style="background:#d9e1f2;font-weight:bold;">单位</th>' +
+    '<th style="background:#d9e1f2;font-weight:bold;">标准限值</th>' +
+    '<th style="background:#d9e1f2;font-weight:bold;">检测数值</th>' +
+    '<th style="background:#d9e1f2;font-weight:bold;">判定</th>' +
+    '</tr>';
+
+  for (const param of PARAM_ORDER) {
+    const r = d.results[param];
+    const val = d.values[param];
+    const valText = (val === null || val === undefined) ? "—" : val;
+    let bg = "";
+    if (r.ok === true) bg = ' style="background:#C8E6C9;color:#166534;font-weight:bold;"';
+    else if (r.ok === false) bg = ' style="background:#FFCDD2;color:#991b1b;font-weight:bold;"';
+    rows += '<tr>' +
+      '<td style="text-align:center;">' + param + '</td>' +
+      '<td style="text-align:center;">' + UNITS[param] + '</td>' +
+      '<td style="text-align:center;">' + r.desc + '</td>' +
+      '<td style="text-align:center;"' + bg + '>' + valText + '</td>' +
+      '<td style="text-align:center;"' + bg + '>' + r.note + '</td>' +
+      '</tr>';
+  }
+
+  const conclColor = d.allOk ? "#166534" : "#991b1b";
+  const conclBg = d.allOk ? "#dcfce7" : "#fee2e2";
+
+  const html =
+    '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+          'xmlns:x="urn:schemas-microsoft-com:office:excel" ' +
+          'xmlns="http://www.w3.org/TR/REC-html40">' +
+    '<head><meta charset="UTF-8">' +
+    '<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>' +
+    '<x:ExcelWorksheet><x:Name>检测报告</x:Name>' +
+    '<x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>' +
+    '</x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->' +
+    '<style>td,th{font-family:"微软雅黑";font-size:11pt;padding:6px 10px;border:1px solid #999;}</style>' +
+    '</head><body>' +
+    '<table>' +
+    '<tr><td colspan="5" style="font-size:16pt;font-weight:bold;text-align:center;background:#fff;">' +
+      '地表水水质检测报告单</td></tr>' +
+    '<tr><td colspan="5" style="font-size:9pt;color:#555;text-align:center;background:#fff;">' +
+      '依据标准：GB 3838-2002《地表水环境质量标准》</td></tr>' +
+    '<tr><td colspan="5" style="background:#fff;"></td></tr>' +
+    '<tr><td colspan="5" style="font-weight:bold;background:#fff;font-size:12pt;">一、基本信息</td></tr>' +
+    rows.split('<tr><th')[0] + // 只取基本信息部分
+    '<tr><td colspan="5" style="background:#fff;"></td></tr>' +
+    '<tr><td colspan="5" style="font-weight:bold;background:#fff;font-size:12pt;">二、检测数据与标准限值</td></tr>' +
+    '<tr><th' + rows.split('<tr><th')[1] +
+    '<tr><td colspan="5" style="background:#fff;"></td></tr>' +
+    '<tr><td colspan="5" style="font-weight:bold;background:#fff;font-size:12pt;">三、检测意见</td></tr>' +
+    '<tr><td colspan="5" style="background:' + conclBg + ';color:' + conclColor +
+      ';font-weight:bold;">' + escapeHtml(d.conclusion) + '</td></tr>' +
+    '<tr><td colspan="5" style="font-size:9pt;color:#666;background:#fff;">' + DISCLAIMER + '</td></tr>' +
+    '</table></body></html>';
+
+  downloadBlob(html, "检测报告_" + d.sampleId + ".xls", "application/vnd.ms-excel");
+}
+
+// ==================== 导出 Word ====================
+function exportWord() {
+  if (!reportData) return;
+  const d = reportData;
+
+  const infoRows = Object.entries(d.info).map(([k, v]) =>
+    '<tr><td style="font-weight:bold;background:#f1f5f9;width:120px;">' + k +
+    '</td><td colspan="4">' + escapeHtml(v) + '</td></tr>'
+  ).join("") +
+  '<tr><td style="font-weight:bold;background:#f1f5f9;">水样编号</td><td colspan="4">' +
+    escapeHtml(d.sampleId) + '</td></tr>' +
+  '<tr><td style="font-weight:bold;background:#f1f5f9;">水样类别</td><td colspan="4">' +
+    escapeHtml(d.category) + '</td></tr>';
+
+  let dataRows = "";
+  for (const param of PARAM_ORDER) {
+    const r = d.results[param];
+    const val = d.values[param];
+    const valText = (val === null || val === undefined) ? "—" : val;
+    let style = "";
+    if (r.ok === true) style = ' style="background:#C8E6C9;color:#166534;font-weight:bold;"';
+    else if (r.ok === false) style = ' style="background:#FFCDD2;color:#991b1b;font-weight:bold;"';
+    dataRows += '<tr>' +
+      '<td>' + param + '</td>' +
+      '<td>' + UNITS[param] + '</td>' +
+      '<td>' + r.desc + '</td>' +
+      '<td' + style + '>' + valText + '</td>' +
+      '<td' + style + '>' + r.note + '</td>' +
+      '</tr>';
+  }
+
+  const conclColor = d.allOk ? "#166534" : "#991b1b";
+  const conclBg = d.allOk ? "#dcfce7" : "#fee2e2";
+
+  const html =
+    '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+          'xmlns:w="urn:schemas-microsoft-com:office:word" ' +
+          'xmlns="http://www.w3.org/TR/REC-html40">' +
+    '<head><meta charset="utf-8">' +
+    '<title>检测报告</title>' +
+    '<!--[if gte mso 9]><xml><w:WordDocument>' +
+    '<w:View>Print</w:View><w:Zoom>100</w:Zoom>' +
+    '</w:WordDocument></xml><![endif]-->' +
+    '<style>' +
+    '@page { size: A4; margin: 2cm; }' +
+    'body { font-family: "微软雅黑", sans-serif; font-size: 11pt; line-height: 1.6; }' +
+    'h1 { text-align: center; font-size: 18pt; margin-bottom: 4px; }' +
+    '.sub { text-align: center; font-size: 9pt; color: #555; margin-bottom: 20px; }' +
+    'h2 { font-size: 13pt; margin-top: 18px; border-bottom: 2px solid #999; padding-bottom: 4px; }' +
+    'table { border-collapse: collapse; width: 100%; margin-top: 8px; }' +
+    'td, th { border: 1px solid #666; padding: 6px 10px; text-align: center; font-size: 10.5pt; }' +
+    'th { background: #d9e1f2; font-weight: bold; }' +
+    '.conclusion { padding: 12px 16px; background: ' + conclBg + '; border-left: 4px solid ' + conclColor +
+    '; color: ' + conclColor + '; font-weight: bold; font-size: 12pt; margin-top: 8px; }' +
+    '.note { font-size: 9pt; color: #666; margin-top: 8px; }' +
+    '</style></head><body>' +
+    '<h1>地表水水质检测报告单</h1>' +
+    '<div class="sub">依据标准：GB 3838-2002《地表水环境质量标准》</div>' +
+    '<h2>一、基本信息</h2>' +
+    '<table>' + infoRows + '</table>' +
+    '<h2>二、检测数据与标准限值</h2>' +
+    '<table>' +
+      '<tr><th>检测项目</th><th>单位</th><th>标准限值</th><th>检测数值</th><th>判定</th></tr>' +
+      dataRows +
+    '</table>' +
+    '<h2>三、检测意见</h2>' +
+    '<div class="conclusion">' + escapeHtml(d.conclusion) + '</div>' +
+    '<div class="note">' + DISCLAIMER + '</div>' +
+    '</body></html>';
+
+  downloadBlob(html, "检测报告_" + d.sampleId + ".doc", "application/msword");
+}
+
+// ==================== 重置 ====================
+function resetAll() {
+  if (!confirm("确定要重新开始吗？已填数据将清空。")) return;
+  document.querySelectorAll("input").forEach(el => el.value = "");
+  document.getElementById("sample-category").value = "Ⅲ类";
+  infoData = {};
+  reportData = null;
+  // 检测时间恢复默认
+  document.getElementById("info-time").value = new Date().toLocaleString("zh-CN", {
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit"
+  }).replace(/\//g, "-");
+  showPage(1);
+}
+
+// ==================== 初始化 ====================
+window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("info-time").value = new Date().toLocaleString("zh-CN", {
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit"
+  }).replace(/\//g, "-");
+});
+</script>
+</body>
+</html>
